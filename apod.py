@@ -1,7 +1,9 @@
+import sys
 try:
 	import urllib2
 except:
 	print "[APOD] Install latest version of python2.7"
+	sys.exit()
 
 try:
 	from bs4 import BeautifulSoup as bs
@@ -9,6 +11,7 @@ except:
 	print "[APOD] BeautifulSoup package required"
 	print "[APOD] please Install BeautifulSoup"
 	print "Go to https://pypi.python.org/pypi/beautifulsoup4"
+	sys.exit()
 
 from time import strftime, time
 

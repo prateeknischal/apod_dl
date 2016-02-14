@@ -10,7 +10,8 @@ class Error_codes():
 		self.err = {
 				"HTTPERR" : 1,
 				"URLERR" : 2,
-				"INCOMPDL" : 3
+				"INCOMPDL" : 3,
+				"NOIMG" : 4
 		}
 
 	def error_code_status(self, error_code):

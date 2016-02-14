@@ -23,13 +23,13 @@ class APOD_Downloader():
 
 	def get_apod_url(self):
 		img = strftime("%y%m%d")
-		img_url = self.BASE_URL + "/" + img
+		img_url = self.BASE_URL + "/" + "160209"
 		return img_url
 
 	def get_image_url(self, img_url):
 		try:
 			req = urllib2.urlopen(img_url) 
-			
+
 		except urllib2.HTTPError, e:
 			print "[APOD] Failed to connect", e.getcode()
 			print "[APOD]",self.error_codes.error_code_status(e.getcode())
@@ -50,8 +50,10 @@ class APOD_Downloader():
 		
 		# The second link is the image location 
 		# for the higest resolution version
-
-		image_location = images[1].get("href")
+		try:
+			image_location = images[1].get("href")
+		except:
+			return self.error_codes.err["NOIMG"]
 
 		# Sample Image location
 		# http://apod.nasa.gov/apod/image/1602/HeartCloud_Kunze_4650.jpg
@@ -63,9 +65,6 @@ class APOD_Downloader():
 		file_name = url.split('/')[-1]
 		try:
 			u = urllib2.urlopen(url)
-			# file name is same as the name of the image in the apod link
-			f = open(file_name, "wb")
-
 			meta = u.info()
 			# meta info  
 			# Server: WebServer/1.0
@@ -78,9 +77,12 @@ class APOD_Downloader():
 			# Date: Sun, 14 Feb 2016 12:33:23 GMT
 			# Age: 3378
 			# Content-Length: 1044298
-
 			file_size = int(meta.getheaders("Content-length")[0])
+			file_type = meta.getheaders("Content-Type")[0]
 
+			if (file_type != "image/jpeg"):
+				print "[APOD]", "The content hosted on apod.nasa.gov is not an image"
+				return self.error_codes.err["NOIMG"]
 			# Block size of each download packet is kept 4 KB
 			block_sz = 4096
 
@@ -90,6 +92,10 @@ class APOD_Downloader():
 			#stating time of download
 			start_time = time()
 			running_time = start_time
+
+			# file name is same as the name of the image in the apod link
+			f = open(file_name, "wb")
+
 			while True:
 				buffer = u.read(block_sz)
 				if not buffer:

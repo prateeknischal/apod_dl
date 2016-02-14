@@ -23,7 +23,7 @@ class APOD_Downloader():
 
 	def get_apod_url(self):
 		img = strftime("%y%m%d")
-		img_url = self.BASE_URL + "/" + "160209"
+		img_url = self.BASE_URL + "/" + img
 		return img_url
 
 	def get_image_url(self, img_url):
